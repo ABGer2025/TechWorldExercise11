@@ -2,7 +2,7 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: mysql-pvc
+  name: mysql-pvc23f
 spec:
   accessModes:
     - ReadWriteOnce
@@ -26,6 +26,16 @@ spec:
     spec:
       nodeSelector:
         eks.amazonaws.com/nodegroup: demo-nodes
+
+      # 🔥 Init-Container: sorgt dafür, dass das Volume WIRKLICH leer ist
+      initContainers:
+      - name: clean-mysql-dir
+        image: busybox
+        command: ["sh", "-c", "rm -rf /var/lib/mysql/*"]
+        volumeMounts:
+        - name: mysql-storage
+          mountPath: /var/lib/mysql
+
       containers:
       - name: mysql
         image: mysql:5.7
@@ -37,10 +47,11 @@ spec:
         volumeMounts:
         - name: mysql-storage
           mountPath: /var/lib/mysql
+
       volumes:
       - name: mysql-storage
         persistentVolumeClaim:
-          claimName: mysql-pvc
+          claimName: mysql-pvc23f
 ---
 apiVersion: v1
 kind: Service
