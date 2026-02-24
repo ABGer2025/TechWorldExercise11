@@ -16,7 +16,7 @@ spec:
       # nodeSelector removed to allow Fargate profile to match by label
       containers:
       - name: nodejs-app
-        image: 352210141460.dkr.ecr.eu-north-1.amazonaws.com/techworldexercise11:e7ab299
+        image: 352210141460.dkr.ecr.eu-north-1.amazonaws.com/techworldexercise11:latest
         ports:
         - containerPort: 3000
 ---
