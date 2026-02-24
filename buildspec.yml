@@ -5,8 +5,9 @@ phases:
     commands:
       - echo Logging in to Amazon ECR...
       - aws --version
-      - aws ecr get-login-password --region eu-north-1 | docker login --username AWS --password-stdin 352210141460.dkr.ecr.eu-north-1.amazonaws.com
-      - IMAGE_TAG=${COMMIT_HASH:=latest}
+      - REPOSITORY_URI=352210141460.dkr.ecr.eu-north-1.amazonaws.com/techworldexercise11
+      - IMAGE_TAG=latest
+      - aws ecr get-login-password --region eu-north-1 | docker login --username AWS --password-stdin $REPOSITORY_URI
   build:
     commands:
       - echo Build started on `date`
