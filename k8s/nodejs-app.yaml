@@ -7,14 +7,13 @@ spec:
   replicas: 3
   selector:
     matchLabels:
-      app: nodejs-app
+      app: fargate 
   template:
     metadata:
       labels:
-        app: nodejs-app
+        app: fargate
     spec:
-      nodeSelector:
-        eks.amazonaws.com/fargate-profile: ClusterFargate
+      # nodeSelector removed to allow Fargate profile to match by label
       containers:
       - name: nodejs-app
         image: 352210141460.dkr.ecr.eu-north-1.amazonaws.com/techworldexercise11:e7ab299
@@ -31,4 +30,4 @@ spec:
     - port: 80
       targetPort: 3000
   selector:
-    app: nodejs-app
+    app: fargate
