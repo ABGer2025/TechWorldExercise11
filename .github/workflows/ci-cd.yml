@@ -5,7 +5,7 @@ on:
     branches: [main]
 
 jobs:
-  build-and-deploy:
+  build:
     runs-on: ubuntu-latest
 
     steps:
@@ -40,5 +40,23 @@ jobs:
       - name: Update kubeconfig
         run: aws eks update-kubeconfig --region eu-north-1 --name demo-cluster2
 
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Setup kubectl
+        uses: azure/setup-kubectl@v3
+        with:
+          version: 'latest'
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: eu-north-1
+      - name: Update kubeconfig
+        run: aws eks update-kubeconfig --region eu-north-1 --name demo-cluster2
       - name: Deploy to EKS
         run: kubectl apply -f k8s/nodejs-app.yaml
